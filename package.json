@@ -1,0 +1,25 @@
+{
+  "name": "coreos-cluster-cli",
+  "version": "1.0.0",
+  "description": "Command line interface for creating a CoreOs Cluster on Rackspace Cloud",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "coreos-cluster": "./index.js"
+  },
+  "keywords": [
+    "coreos",
+    "cluster",
+    "docker",
+    "rackspace",
+    "docker"
+  ],
+  "author": "Ken Perkins <ken.perkins@rackspace.com>",
+  "license": "MIT",
+  "dependencies": {
+    "coreos-cluster": "~2.0.0",
+    "lodash": "~2.4.1"
+  }
+}
