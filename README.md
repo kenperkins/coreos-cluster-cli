@@ -9,6 +9,8 @@ $ coreos-cluster --username my-rackspace-username --apiKey asdf1234 --region iad
     --cluster-size 5 --release alpha
 ```
 
+![example usage](coreos-cluster.gif)
+
 ### Usage
 
 ```
