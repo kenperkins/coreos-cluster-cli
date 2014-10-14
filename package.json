@@ -17,9 +17,16 @@
     "docker"
   ],
   "author": "Ken Perkins <ken.perkins@rackspace.com>",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/kenperkins/coreos-cluster-cli.git"
+  },
   "license": "MIT",
   "dependencies": {
     "coreos-cluster": "~2.0.0",
+    "colors": "1.0.3",
+    "commander": "2.3.0",
+    "easy-table": "0.3.0",
     "lodash": "~2.4.1"
   }
 }
