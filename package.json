@@ -23,7 +23,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "coreos-cluster": "~3.0.0",
+    "coreos-cluster": "~3.0.1",
     "colors": "1.0.3",
     "commander": "2.3.0",
     "easy-table": "0.3.0",
