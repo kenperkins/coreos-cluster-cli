@@ -13,7 +13,10 @@ program
   .option('-t --type [type]', 'type of cluster [performance]', 'performance')
   .option('-r --release [release]', 'coreos release [stable]', 'stable')
   .option('-f --flavor [flavor]', 'flavor for the coreos cluster [performance1-1]')
-  .option('--cluster-size [size]', 'size of coreos cluster [3]', 3)
+  .option('--num-nodes [number]', 'number of nodes to create (or add)', parseInt)
+  .option('--discovery-service-url [url]', 'url for an existing cluster discovery service')
+  .option('--private-network [guid]', 'guid for an optional private network')
+  .option('--monitoring-token [guid]', 'guid for optional rackspace cloud monitoring')
   .option('--key-name [ssh keyname]', 'optional ssh keyname')
   .option('--username [username]', 'required or via RACKSPACE_USERNAME env variable')
   .option('--apiKey [apiKey]', 'required or via RACKSPACE_APIKEY env variable')
@@ -23,7 +26,6 @@ program
 var options = {
   type: program.type,
   release: program.release,
-  size: program.clusterSize,
   credentials: {
     username: program.username || process.env.RACKSPACE_USERNAME,
     apiKey: program.apiKey || process.env.RACKSPACE_APIKEY,
@@ -44,8 +46,17 @@ if (program.flavor) {
 if (program.keyName) {
   options.keyname = program.keyName;
 }
+if (program.discoveryServiceUrl) {
+  options.discoveryServiceUrl = program.discoveryServiceUrl;
+}
+if (program.privateNetwork) {
+  options.privateNetwork = program.privateNetwork;
+}
+if (program.monitoringToken) {
+  options.monitoringToken = program.monitoringToken;
+}
 
-var cluster;
+var cluster, interval;
 
 try {
   cluster = new Cluster(options);
@@ -58,7 +69,7 @@ console.log(colors.green('Starting coreos-cluster create...'));
 console.log(colors.yellow('  Type: ') + colors.green(cluster.type));
 console.log(colors.yellow('  Release: ') + colors.green(cluster.release));
 console.log(colors.yellow('  Flavor: ') + colors.green(cluster.flavor));
-console.log(colors.yellow('  Size: ') + colors.green(cluster.size));
+console.log(colors.yellow('  Number of Nodes: ') + colors.green(program.numNodes));
 
 process.stdout.write(colors.yellow('\ncoreos-cluster initializing...'));
 cluster.initialize(function(err) {
@@ -68,15 +79,37 @@ cluster.initialize(function(err) {
 
   process.stdout.write(colors.green('done: \n'));
   console.log(colors.yellow('  SSH Key: ') + colors.green(cluster.keyname));
-  console.log(colors.yellow('  Service Discovery URL: ') + colors.green(cluster._serviceDiscoveryUrl));
+  console.log(colors.yellow('  Service Discovery URL: ') + colors.green(cluster.discoveryServiceUrl));
 
-  console.log(colors.red('\nCreating Servers...') + colors.gray(' this may take a few minutes...\n'));
+  console.log('\n' + colors.blue('Validating cluster options and total number of nodes...'));
 
-  var interval = setInterval(function() {
-    process.stdout.write(colors.gray('.'));
-  }, 2500);
+  cluster.validateNodeOptions(function(err, currentNodes) {
+    if (err) {
+      terminate(err);
+    }
 
-  cluster.provision(function(err) {
+    console.log(colors.blue('  Found ') + colors.green(currentNodes + ' current nodes') + colors.blue(' for cluster ' + cluster._clusterToken));
+    console.log(colors.blue('  Adding ') + colors.green(program.numNodes + ' nodes') + colors.blue(' to cluster ' + cluster._clusterToken + '\n'));
+
+    if (currentNodes + program.numNodes < 3) {
+      terminate('Total number of nodes must be at least 3');
+    }
+
+    if (currentNodes) {
+      console.log(colors.red('\nAdd New Servers To Cluster...') + colors.gray(' this may take a few minutes...\n'));
+    }
+    else {
+      console.log(colors.red('\nCreating Servers For New Cluster...') + colors.gray(' this may take a few minutes...\n'));
+    }
+
+    interval = setInterval(function() {
+      process.stdout.write(colors.gray('.'));
+    }, 2500);
+
+    cluster.addNodes(program.numNodes, handleProvision)
+  });
+
+  function handleProvision(err) {
     clearInterval(interval);
     process.stdout.write(colors.gray('done!\n\n'));
 
@@ -101,7 +134,7 @@ cluster.initialize(function(err) {
 
     console.log(t.toString());
 
-    console.log(colors.yellow('  Service Discovery URL: ') + colors.green(cluster._serviceDiscoveryUrl));
+    console.log(colors.yellow('  Service Discovery URL: ') + colors.green(cluster.discoveryServiceUrl));
     console.log(colors.yellow('  SSH Key: ') + colors.green(cluster.keyname));
 
     if (cluster._keypair) {
@@ -111,7 +144,7 @@ cluster.initialize(function(err) {
     }
 
     console.log(colors.green('\nSUCCESS!'));
-  });
+  }
 });
 
 function terminate(reason, help) {
