@@ -28,8 +28,7 @@ program
 var options = {
   type: program.type,
   release: program.release,
-  update: {
-  },
+  update: {},
   credentials: {
     username: program.username || process.env.RACKSPACE_USERNAME,
     apiKey: program.apiKey || process.env.RACKSPACE_APIKEY,
