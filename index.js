@@ -28,6 +28,8 @@ program
 var options = {
   type: program.type,
   release: program.release,
+  update: {
+  },
   credentials: {
     username: program.username || process.env.RACKSPACE_USERNAME,
     apiKey: program.apiKey || process.env.RACKSPACE_APIKEY,
@@ -57,8 +59,6 @@ if (program.privateNetwork) {
 if (program.monitoringToken) {
   options.monitoringToken = program.monitoringToken;
 }
-
-options.update = {}
 
 if (program.updateGroup) {
   options.update.group = program.updateGroup;
