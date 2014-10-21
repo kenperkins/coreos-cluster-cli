@@ -18,6 +18,8 @@ program
   .option('--private-network [guid]', 'guid for an optional private network')
   .option('--monitoring-token [guid]', 'guid for optional rackspace cloud monitoring')
   .option('--key-name [ssh keyname]', 'optional ssh keyname')
+  .option('--updateGroup [group]', 'optional update group')
+  .option('--updateServer [server]', 'optional endpoint for updates')
   .option('--username [username]', 'required or via RACKSPACE_USERNAME env variable')
   .option('--apiKey [apiKey]', 'required or via RACKSPACE_APIKEY env variable')
   .option('--region [region]', 'required or via RACKSPACE_REGION env variable')
@@ -54,6 +56,16 @@ if (program.privateNetwork) {
 }
 if (program.monitoringToken) {
   options.monitoringToken = program.monitoringToken;
+}
+
+options.update = {}
+
+if (program.updateGroup) {
+  options.update.group = program.updateGroup;
+}
+
+if (program.updateServer) {
+  options.update.server = program.updateServer;
 }
 
 var cluster, interval;
