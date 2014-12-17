@@ -17,6 +17,7 @@ program
   .option('--discovery-service-url [url]', 'url for an existing cluster discovery service')
   .option('--private-network [guid]', 'guid for an optional private network')
   .option('--monitoring-token [guid]', 'guid for optional rackspace cloud monitoring')
+  .option('--ephemeral', 'optional use data disk for Docker storage')
   .option('--key-name [ssh keyname]', 'optional ssh keyname')
   .option('--updateGroup [group]', 'optional update group')
   .option('--updateServer [server]', 'optional endpoint for updates')
@@ -58,6 +59,10 @@ if (program.privateNetwork) {
 if (program.monitoringToken) {
   options.monitoringToken = program.monitoringToken;
 }
+options.ephemeral = false;
+if (program.ephemeral) {
+  options.ephemeral = program.ephemeral;
+}
 
 if (program.updateGroup) {
   options.update.group = program.updateGroup;
@@ -91,6 +96,7 @@ cluster.initialize(function(err) {
   process.stdout.write(colors.green('done: \n'));
   console.log(colors.yellow('  SSH Key: ') + colors.green(cluster.keyname));
   console.log(colors.yellow('  Service Discovery URL: ') + colors.green(cluster.discoveryServiceUrl));
+  console.log(colors.yellow('  Docker storage on data disk: ') + colors.green(cluster.ephemeral));
 
   console.log('\n' + colors.blue('Validating cluster options and total number of nodes...'));
 
