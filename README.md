@@ -27,6 +27,7 @@ $ coreos-cluster --username my-rackspace-username --apiKey asdf1234 --region iad
     --discovery-service-url [url]  url for an existing cluster discovery service
     --private-network [guid]       guid for an optional private network
     --monitoring-token [guid]      guid for optional rackspace cloud monitoring
+    --ephemeral                    optional use data disk for Docker storage
     --key-name [ssh keyname]       optional ssh keyname
     --username [username]          required or via RACKSPACE_USERNAME env variable
     --apiKey [apiKey]              required or via RACKSPACE_APIKEY env variable
