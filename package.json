@@ -1,6 +1,6 @@
 {
   "name": "coreos-cluster-cli",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Command line interface for creating a CoreOs Cluster on Rackspace Cloud",
   "main": "index.js",
   "scripts": {
