@@ -10,6 +10,7 @@ var pkg = require('./package.json');
 
 program
   .version(pkg.version)
+  .option('--basename [name]', 'prefixed name of cluster', 'cluster-')
   .option('-t --type [type]', 'type of cluster [performance]', 'performance')
   .option('-r --release [release]', 'coreos release [stable]', 'stable')
   .option('-f --flavor [flavor]', 'flavor for the coreos cluster [performance1-1]')
@@ -41,6 +42,10 @@ if (!options.credentials.region ||
   !options.credentials.apiKey) {
   program.help();
   process.exit(2);
+}
+
+if (program.basename) {
+    options.basename = program.basename
 }
 
 if (program.flavor) {
