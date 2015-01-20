@@ -1,6 +1,6 @@
 ## coreos-cluster-cli [![NPM version](https://badge.fury.io/js/coreos-cluster-cli.png)](http://badge.fury.io/js/coreos-cluster-cli)
 
-Create a fully functional [CoreOs Cluster](https://coreos.com/using-coreos/) on Rackspace Cloud from the command line. A node.js sdk version of `coreos-cluster-cli` is available on npm as [`coreos-cluster`](https://npmjs.org/package/coreos-cluster).
+Create a fully functional [CoreOS Cluster](https://coreos.com/using-coreos/) on Rackspace Cloud from the command line. A node.js sdk version of `coreos-cluster-cli` is available on npm as [`coreos-cluster`](https://npmjs.org/package/coreos-cluster).
 
 #### Quick Example
 
